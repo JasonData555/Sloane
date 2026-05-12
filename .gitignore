@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Sloane IP
+prompts/scope-extraction-prompt.txt
+CLAUDE.md.txt
+Sloane_PRD_v3.3.txt
