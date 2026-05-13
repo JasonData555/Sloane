@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { timingSafeEqual } from 'crypto';
+import bcrypt from 'bcryptjs';
 import { signSessionToken } from '@/lib/session';
+import { getUserByEmail } from '@/lib/users';
 
 // ─── Rate limiting ────────────────────────────────────────────────────────────
 // In-memory — resets on server restart. Sufficient for Sprint 1 internal use.
@@ -52,42 +54,59 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Too many attempts — try again later' }, { status: 429 });
   }
 
-  // Parse USER_PINS safely — bad JSON must not crash the server
-  let userPins: Record<string, string> = {};
+  // ── Airtable user check (primary path) ───────────────────────────────────────
+  let authenticated = false;
   try {
-    userPins = JSON.parse(process.env.USER_PINS ?? '{}');
-  } catch {
-    console.error('[auth] USER_PINS is not valid JSON');
-    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
-  }
-
-  // Validate allowlist
-  const allowedUsers = (process.env.ALLOWED_USERS ?? '')
-    .split(',')
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-
-  if (allowedUsers.length && !allowedUsers.includes(emailLc)) {
-    recordFailedAttempt(emailLc);
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  // Validate PIN using timing-safe comparison
-  // Note: PINs are stored in plaintext in USER_PINS env var for Sprint 1.
-  // Add bcrypt/argon2 hashing before any external exposure.
-  if (Object.keys(userPins).length > 0) {
-    const expectedPin = userPins[emailLc] ?? '';
-    let pinValid = false;
-    try {
-      const a = Buffer.from(pin);
-      const b = Buffer.from(expectedPin);
-      pinValid = a.length === b.length && timingSafeEqual(a, b);
-    } catch {
-      pinValid = false;
+    const airtableUser = await getUserByEmail(emailLc);
+    if (airtableUser && airtableUser.status === 'Active') {
+      authenticated = await bcrypt.compare(pin, airtableUser.pinHash);
+      if (!authenticated) {
+        recordFailedAttempt(emailLc);
+        return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      }
     }
-    if (!pinValid) {
+  } catch (err) {
+    console.error('[auth] Airtable lookup failed, falling back to env vars:', err);
+  }
+
+  // ── Env-var fallback (backward compat for existing accounts) ─────────────────
+  if (!authenticated) {
+    let userPins: Record<string, string> = {};
+    try {
+      userPins = JSON.parse(process.env.USER_PINS ?? '{}');
+    } catch {
+      console.error('[auth] USER_PINS is not valid JSON');
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+
+    const allowedUsers = (process.env.ALLOWED_USERS ?? '')
+      .split(',')
+      .map((e) => e.trim().toLowerCase())
+      .filter(Boolean);
+
+    if (allowedUsers.length && !allowedUsers.includes(emailLc)) {
       recordFailedAttempt(emailLc);
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (Object.keys(userPins).length > 0) {
+      const expectedPin = userPins[emailLc] ?? '';
+      let pinValid = false;
+      try {
+        const a = Buffer.from(pin);
+        const b = Buffer.from(expectedPin);
+        pinValid = a.length === b.length && timingSafeEqual(a, b);
+      } catch {
+        pinValid = false;
+      }
+      if (!pinValid) {
+        recordFailedAttempt(emailLc);
+        return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      }
+    } else if (allowedUsers.length === 0) {
+      // No users configured at all
+      recordFailedAttempt(emailLc);
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
   }
 

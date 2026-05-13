@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 function LoginForm() {
   const router = useRouter();
@@ -10,6 +11,9 @@ function LoginForm() {
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const signupSuccess = searchParams.get('signup') === 'success';
+  const resetSuccess = searchParams.get('reset') === 'success';
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -39,6 +43,16 @@ function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {signupSuccess && (
+        <div className="bg-[#F0FDF4] border border-[#166534]/20 rounded-lg px-4 py-3 text-sm text-[#166534]">
+          Account created. You can now sign in.
+        </div>
+      )}
+      {resetSuccess && (
+        <div className="bg-[#F0FDF4] border border-[#166534]/20 rounded-lg px-4 py-3 text-sm text-[#166534]">
+          PIN updated. You can now sign in.
+        </div>
+      )}
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-stone-500 mb-1">
           Email
@@ -81,6 +95,10 @@ function LoginForm() {
       >
         {loading ? 'Signing in…' : 'Sign in'}
       </button>
+
+      <p className="text-center text-sm text-stone-400">
+        <Link href="/forgot-password" className="text-teal-700 hover:underline">Forgot PIN?</Link>
+      </p>
     </form>
   );
 }
@@ -96,6 +114,10 @@ export default function LoginPage() {
         <Suspense fallback={null}>
           <LoginForm />
         </Suspense>
+        <p className="text-center text-sm text-stone-400 mt-6">
+          New to Sloane?{' '}
+          <Link href="/signup" className="text-teal-700 hover:underline">Create an account</Link>
+        </p>
       </div>
     </div>
   );
