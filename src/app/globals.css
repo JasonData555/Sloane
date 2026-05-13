@@ -2,9 +2,37 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  --color-bg-primary:     #F5F0EB;
+  --color-bg-secondary:   #EDE8E3;
+  --color-bg-elevated:    #FAF7F4;
+  --color-teal-primary:   #0F766E;
+  --color-teal-hover:     #0D9488;
+  --color-teal-subtle:    #CCFBF1;
+  --color-teal-border:    #99F6E4;
+  --color-text-primary:   #1C1917;
+  --color-text-secondary: #78716C;
+  --color-text-muted:     #A8A29E;
+  --color-text-on-teal:   #FFFFFF;
+  --color-border-default: #D6CFC8;
+  --color-border-subtle:  #E7E2DC;
+  --color-success:        #166534;
+  --color-success-bg:     #F0FDF4;
+  --color-warning:        #92400E;
+  --color-warning-bg:     #FFFBEB;
+  --color-error:          #991B1B;
+  --color-error-bg:       #FEF2F2;
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-beige-50:  #FAF7F4;
+  --color-beige-100: #F5F0EB;
+  --color-beige-200: #EDE8E3;
+  --color-beige-300: #D6CFC8;
+  --color-beige-400: #E7E2DC;
 }
 
 body {

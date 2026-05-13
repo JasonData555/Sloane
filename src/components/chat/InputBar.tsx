@@ -38,7 +38,7 @@ export default function InputBar({ onSend, disabled, placeholder = 'Message Sloa
   }
 
   return (
-    <div className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-4 py-3 pb-[max(12px,env(safe-area-inset-bottom))]">
+    <div className="border-t border-beige-300 bg-beige-50 px-4 py-3 pb-[max(12px,env(safe-area-inset-bottom))]">
       <div className="flex items-end gap-3 max-w-2xl mx-auto">
         <textarea
           ref={textareaRef}
@@ -49,12 +49,12 @@ export default function InputBar({ onSend, disabled, placeholder = 'Message Sloa
           disabled={disabled}
           placeholder={placeholder}
           rows={1}
-          className="flex-1 resize-none bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 leading-relaxed min-h-[44px] max-h-[160px]"
+          className="flex-1 resize-none bg-beige-50 border border-beige-300 rounded-xl px-4 py-3 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-transparent disabled:opacity-50 leading-relaxed min-h-[44px] max-h-[160px]"
         />
         <button
           onClick={handleSend}
           disabled={disabled || !text.trim()}
-          className="flex-shrink-0 w-10 h-10 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex-shrink-0 w-10 h-10 rounded-xl bg-teal-700 hover:bg-teal-600 active:bg-teal-800 flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label="Send message"
         >
           <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

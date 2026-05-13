@@ -20,14 +20,14 @@ export default function ChatThread({ messages, isLoading }: Props) {
     return (
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center mx-auto mb-4">
+          <div className="w-12 h-12 rounded-full bg-teal-700 flex items-center justify-center mx-auto mb-4">
             <span className="text-xl font-semibold text-white">S</span>
           </div>
-          <p className="text-gray-600 dark:text-gray-300 font-medium">Sloane</p>
-          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+          <p className="text-stone-500 font-medium">Sloane</p>
+          <p className="text-stone-400 text-sm mt-1">
             Select a search above, then type a command to get started.
           </p>
-          <p className="text-gray-400 dark:text-gray-600 text-xs mt-3">
+          <p className="text-stone-400 text-xs mt-3">
             Try: &quot;Kick off the BreachRx CISO search&quot;
           </p>
         </div>
@@ -42,14 +42,14 @@ export default function ChatThread({ messages, isLoading }: Props) {
       ))}
       {isLoading && (
         <div className="flex justify-start mb-3">
-          <div className="flex-shrink-0 w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center mr-2 mt-0.5">
+          <div className="flex-shrink-0 w-7 h-7 rounded-full bg-teal-700 flex items-center justify-center mr-2 mt-0.5">
             <span className="text-xs font-semibold text-white">S</span>
           </div>
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-bl-sm px-4 py-3">
+          <div className="bg-beige-200 border border-beige-400 rounded-2xl rounded-bl-sm px-4 py-3">
             <div className="flex gap-1 items-center h-4">
-              <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]" />
-              <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]" />
-              <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]" />
+              <div className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce [animation-delay:0ms]" />
+              <div className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce [animation-delay:150ms]" />
+              <div className="w-1.5 h-1.5 bg-stone-400 rounded-full animate-bounce [animation-delay:300ms]" />
             </div>
           </div>
         </div>

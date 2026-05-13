@@ -146,23 +146,23 @@ export default function ChatPage() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-beige-300 bg-beige-100">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+          <div className="w-6 h-6 rounded-full bg-teal-700 flex items-center justify-center">
             <span className="text-xs font-semibold text-white">S</span>
           </div>
-          <span className="text-sm font-semibold text-gray-900 dark:text-white">Sloane</span>
+          <span className="text-sm font-semibold text-stone-900">Sloane</span>
         </div>
         <div className="flex items-center gap-2">
           {selectedSearch && (
-            <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">
+            <span className="text-xs text-stone-500 bg-beige-200 px-2 py-1 rounded-full">
               {stage}
             </span>
           )}
           <button
             onClick={() => handleSend('help')}
             disabled={!selectedSearch || isLoading}
-            className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 w-6 h-6 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="text-xs text-stone-400 hover:text-teal-700 w-6 h-6 rounded-full border border-beige-300 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             aria-label="Show command reference"
           >
             ?
