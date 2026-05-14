@@ -13,10 +13,9 @@ export interface AirtableUser {
 function getTable() {
   const apiKey = process.env.AIRTABLE_API_KEY;
   const baseId = process.env.AIRTABLE_BASE_ID;
-  const tableId = process.env.AIRTABLE_USERS_TABLE_ID;
+  const tableId = process.env.AIRTABLE_USERS_TABLE_ID ?? 'tblfQG7HXOZyjqpxu';
   if (!apiKey) throw new Error('AIRTABLE_API_KEY is not set');
   if (!baseId) throw new Error('AIRTABLE_BASE_ID is not set');
-  if (!tableId) throw new Error('AIRTABLE_USERS_TABLE_ID is not set');
   return new Airtable({ apiKey }).base(baseId)(tableId);
 }
 

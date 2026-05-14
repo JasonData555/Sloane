@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
   const emailLc = email.toLowerCase().trim();
 
-  const missingVars = ['AIRTABLE_API_KEY', 'AIRTABLE_BASE_ID', 'AIRTABLE_USERS_TABLE_ID']
+  const missingVars = ['AIRTABLE_API_KEY', 'AIRTABLE_BASE_ID']
     .filter(v => !process.env[v]);
   if (missingVars.length > 0) {
     console.error('[auth/signup] Missing env vars:', missingVars.join(', '));
