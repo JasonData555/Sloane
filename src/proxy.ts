@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // available here. This layer only checks cookie presence for UX redirects.
 // Full HMAC token validation happens inside each Node.js route handler.
 
-const PUBLIC_PATHS = ['/login', '/signup', '/forgot-password', '/reset-password', '/api/auth'];
+const PUBLIC_PATHS = ['/login', '/api/auth'];
 
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;

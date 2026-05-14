@@ -2,18 +2,13 @@
 
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState('');
-  const [pin, setPin] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const signupSuccess = searchParams.get('signup') === 'success';
-  const resetSuccess = searchParams.get('reset') === 'success';
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -24,7 +19,7 @@ function LoginForm() {
       const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, pin }),
+        body: JSON.stringify({ password }),
       });
 
       if (res.ok) {
@@ -43,46 +38,19 @@ function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {signupSuccess && (
-        <div className="bg-[#F0FDF4] border border-[#166534]/20 rounded-lg px-4 py-3 text-sm text-[#166534]">
-          Account created. You can now sign in.
-        </div>
-      )}
-      {resetSuccess && (
-        <div className="bg-[#F0FDF4] border border-[#166534]/20 rounded-lg px-4 py-3 text-sm text-[#166534]">
-          PIN updated. You can now sign in.
-        </div>
-      )}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-stone-500 mb-1">
-          Email
+        <label htmlFor="password" className="block text-sm font-medium text-stone-500 mb-1">
+          Password
         </label>
         <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-          className="w-full px-4 py-3 rounded-lg bg-beige-50 border border-beige-300 text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-transparent text-base"
-          placeholder="you@hitchpartners.com"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="pin" className="block text-sm font-medium text-stone-500 mb-1">
-          PIN
-        </label>
-        <input
-          id="pin"
+          id="password"
           type="password"
-          value={pin}
-          onChange={(e) => setPin(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
           autoComplete="current-password"
-          inputMode="numeric"
           className="w-full px-4 py-3 rounded-lg bg-beige-50 border border-beige-300 text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-transparent text-base"
-          placeholder="••••"
+          placeholder="••••••••"
         />
       </div>
 
@@ -95,10 +63,6 @@ function LoginForm() {
       >
         {loading ? 'Signing in…' : 'Sign in'}
       </button>
-
-      <p className="text-center text-sm text-stone-400">
-        <Link href="/forgot-password" className="text-teal-700 hover:underline">Forgot PIN?</Link>
-      </p>
     </form>
   );
 }
@@ -114,10 +78,6 @@ export default function LoginPage() {
         <Suspense fallback={null}>
           <LoginForm />
         </Suspense>
-        <p className="text-center text-sm text-stone-400 mt-6">
-          New to Sloane?{' '}
-          <Link href="/signup" className="text-teal-700 hover:underline">Create an account</Link>
-        </p>
       </div>
     </div>
   );
