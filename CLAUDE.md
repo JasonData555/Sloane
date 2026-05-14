@@ -52,6 +52,7 @@ Do not propose alternatives without explicit instruction.
 | `SCOPE_EXTRACTION_PROMPT` | Core IP prompt — never expose to client |
 | `INTENT_CLASSIFICATION_PROMPT` | Intent routing prompt — never expose. Must include `help` triggers. |
 | `SLOANE_HELP_TEXT` | Command reference returned on `help` intent. Overrides hardcoded fallback in `src/config/commands.ts`. Update in Vercel to change without a code deploy. |
+| `AIRTABLE_USERS_TABLE_ID` | Airtable Users table ID (`tblfQG7HXOZyjqpxu`) — required for signup, login (bcrypt path), and password reset |
 | `APIFY_API_KEY` | LinkedIn scraper (Sprint 3) |
 
 Full reference: `docs/environment-variables.md`
