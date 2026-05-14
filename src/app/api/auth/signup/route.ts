@@ -64,6 +64,13 @@ export async function POST(req: NextRequest) {
 
   const emailLc = email.toLowerCase().trim();
 
+  const missingVars = ['AIRTABLE_API_KEY', 'AIRTABLE_BASE_ID', 'AIRTABLE_USERS_TABLE_ID']
+    .filter(v => !process.env[v]);
+  if (missingVars.length > 0) {
+    console.error('[auth/signup] Missing env vars:', missingVars.join(', '));
+    return NextResponse.json({ error: 'Server error — please try again' }, { status: 500 });
+  }
+
   try {
     const existing = await getUserByEmail(emailLc);
     if (existing) {
@@ -73,7 +80,9 @@ export async function POST(req: NextRequest) {
     const pinHash = await bcrypt.hash(pin, 10);
     await createUser(name.trim(), emailLc, pinHash);
   } catch (err) {
-    console.error('[auth/signup] error:', err);
+    const msg = err instanceof Error ? err.message : String(err);
+    const code = (err as { statusCode?: number }).statusCode;
+    console.error(`[auth/signup] error: ${msg}${code ? ` (HTTP ${code})` : ''}`);
     return NextResponse.json({ error: 'Server error — please try again' }, { status: 500 });
   }
 
