@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
+import { timingSafeEqual } from 'crypto';
 import { signSessionToken } from '@/lib/session';
 
 // ─── POST /api/auth ───────────────────────────────────────────────────────────
@@ -13,13 +13,21 @@ export async function POST(req: NextRequest) {
   }
 
   const { password } = body;
-  const hash = process.env.LOGIN_PASSWORD_HASH;
+  const expected = process.env.LOGIN_PASSWORD;
 
-  if (!password || !hash) {
+  if (!password || !expected) {
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
   }
 
-  const match = await bcrypt.compare(password, hash);
+  let match = false;
+  try {
+    const a = Buffer.from(password);
+    const b = Buffer.from(expected);
+    match = a.length === b.length && timingSafeEqual(a, b);
+  } catch {
+    match = false;
+  }
+
   if (!match) {
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
   }
